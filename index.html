@@ -1,0 +1,1474 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پیشنهاددهنده انیمه فارسی</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #2d3748;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .app-wrapper {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .screen {
+      display: none;
+      width: 100%;
+      min-height: 100%;
+      padding: 2rem 1rem;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    .welcome-container, .membership-container {
+      background: white;
+      border-radius: 2rem;
+      padding: 3rem 2rem;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: slideUp 0.5s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .welcome-emoji {
+      font-size: 5rem;
+      margin-bottom: 1.5rem;
+      animation: bounce 1s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .welcome-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 1rem;
+    }
+
+    .welcome-message {
+      font-size: 1.2rem;
+      color: #4a5568;
+      margin-bottom: 2rem;
+    }
+
+    .welcome-button, .membership-button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 1rem 3rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border-radius: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .welcome-button:hover, .membership-button:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .membership-emoji {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .membership-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 1rem;
+    }
+
+    .membership-message {
+      font-size: 1.1rem;
+      color: #4a5568;
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+
+    .membership-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .membership-button.disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .app-container {
+      width: 100%;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 1rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: white;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+      font-weight: 700;
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+
+    .progress-bar {
+      width: 100%;
+      max-width: 700px;
+      height: 8px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: white;
+      border-radius: 10px;
+      transition: width 0.4s ease;
+      box-shadow: 0 0 10px rgba(255,255,255,0.5);
+    }
+
+    .step-indicator {
+      color: white;
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    .card {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 700px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .question-step {
+      display: none;
+      animation: slideIn 0.4s ease;
+    }
+
+    .question-step.active {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .question-section {
+      margin-bottom: 2rem;
+    }
+
+    .question-label {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 1.25rem;
+      display: block;
+    }
+
+    .question-number {
+      display: inline-block;
+      width: 35px;
+      height: 35px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 35px;
+      margin-left: 0.75rem;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      padding: 0.65rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: white;
+    }
+
+    .checkbox-item:hover {
+      border-color: #667eea;
+      background: #f7fafc;
+    }
+
+    .checkbox-item.selected {
+      border-color: #667eea;
+      background: #edf2f7;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      margin-left: 0.5rem;
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+      accent-color: #667eea;
+    }
+
+    .checkbox-item label {
+      cursor: pointer;
+      flex: 1;
+      font-size: 0.95rem;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .radio-item {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: white;
+    }
+
+    .radio-item:hover {
+      border-color: #667eea;
+      background: #f7fafc;
+    }
+
+    .radio-item.selected {
+      border-color: #667eea;
+      background: #edf2f7;
+    }
+
+    .radio-item input[type="radio"] {
+      margin-left: 0.75rem;
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+      accent-color: #667eea;
+    }
+
+    .radio-item label {
+      cursor: pointer;
+      flex: 1;
+      font-size: 1rem;
+    }
+
+    .text-input-wrapper {
+      margin-top: 0.75rem;
+    }
+
+    .text-input-wrapper textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 0.5rem;
+      font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+      font-size: 0.95rem;
+      resize: vertical;
+      min-height: 100px;
+      transition: border-color 0.2s ease;
+    }
+
+    .text-input-wrapper textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .navigation-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .nav-button {
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      border-radius: 0.75rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+    }
+
+    .btn-next, .btn-submit {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-next:hover, .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }
+
+    .btn-prev {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+
+    .btn-prev:hover {
+      background: #f7fafc;
+      transform: translateY(-2px);
+    }
+
+    .btn-next:active, .btn-prev:active, .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .result-card {
+      text-align: center;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-title {
+      font-size: 1.5rem;
+      color: #667eea;
+      margin-bottom: 1.5rem;
+      font-weight: bold;
+    }
+
+    .search-box {
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 0.75rem;
+      font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+      font-size: 1rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 2rem;
+      color: #718096;
+      font-size: 1.1rem;
+    }
+
+    .anime-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      max-height: 500px;
+      overflow-y: auto;
+      padding: 0.5rem;
+    }
+
+    .anime-item {
+      display: flex;
+      align-items: center;
+      padding: 1.25rem;
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+      border-radius: 1rem;
+      border: 2px solid #e2e8f0;
+      transition: all 0.3s ease;
+      gap: 1rem;
+      position: relative;
+    }
+
+    .anime-item:hover {
+      border-color: #667eea;
+      transform: translateX(-5px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    }
+
+    .anime-item.top-pick {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-color: #667eea;
+    }
+
+    .anime-item.top-pick .anime-badge {
+      background: rgba(255, 255, 255, 0.3);
+      color: white;
+    }
+
+    .anime-rank {
+      font-size: 1.5rem;
+      font-weight: bold;
+      min-width: 40px;
+      text-align: center;
+    }
+
+    .anime-details {
+      flex: 1;
+      text-align: right;
+    }
+
+    .anime-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .anime-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.85rem;
+      opacity: 0.8;
+      flex-wrap: wrap;
+    }
+
+    .anime-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: #fef5e7;
+      border-radius: 0.5rem;
+      font-weight: 600;
+    }
+
+    .copy-button {
+      background: white;
+      border: 2px solid #667eea;
+      color: #667eea;
+      width: 40px;
+      height: 40px;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .copy-button:hover {
+      background: #667eea;
+      color: white;
+      transform: scale(1.1);
+    }
+
+    .copy-button:active {
+      transform: scale(0.95);
+    }
+
+    .copy-button.copied {
+      background: #48bb78;
+      border-color: #48bb78;
+      color: white;
+    }
+
+    .anime-item.top-pick .copy-button {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: white;
+      color: white;
+    }
+
+    .anime-item.top-pick .copy-button:hover {
+      background: white;
+      color: #667eea;
+    }
+
+    .retry-button {
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 0.75rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .retry-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 640px) {
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .card {
+        padding: 1.5rem;
+      }
+
+      .checkbox-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      }
+
+      .navigation-buttons {
+        flex-direction: column;
+      }
+
+      .welcome-title, .membership-title {
+        font-size: 1.5rem;
+      }
+
+      .welcome-container, .membership-container {
+        padding: 2rem 1.5rem;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="app-wrapper"><!-- Welcome Screen -->
+   <div class="screen active" id="welcome-screen">
+    <div class="welcome-container">
+     <div class="welcome-emoji">
+      👋
+     </div>
+     <h1 class="welcome-title" id="welcome-title">به پیشنهاد‌دهنده انیمه خوش آمدید!</h1>
+     <p class="welcome-message" id="welcome-message">تیم منتورو</p><button class="welcome-button" id="welcome-button">بزن بریم</button>
+    </div>
+   </div><!-- Membership Screen -->
+   <div class="screen" id="membership-screen">
+    <div class="membership-container">
+     <div class="membership-emoji">
+      🎯
+     </div>
+     <h2 class="membership-title" id="membership-title">یک قدم مانده!</h2>
+     <p class="membership-message" id="membership-message">لطفا در کانال روبیکا ما عضو شوید تا بتوانید از پیشنهادات انیمه استفاده کنید</p>
+     <div class="membership-buttons"><button class="membership-button" id="join-button">عضویت در کانال</button> <button class="membership-button disabled" id="continue-button" disabled>ادامه</button>
+     </div>
+    </div>
+   </div><!-- Main App Screen -->
+   <div class="screen" id="main-screen">
+    <div class="app-container">
+     <header class="header">
+      <h1 id="main-title">انیمه مورد علاقه‌ات را پیدا کن</h1>
+      <p id="subtitle">با پاسخ دادن به چند سوال ساده</p>
+     </header>
+     <div class="step-indicator" id="step-indicator">
+      سوال 1 از 5
+     </div>
+     <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width: 20%"></div>
+     </div>
+     <main class="card" id="question-form">
+      <form id="anime-form"><!-- Step 1: Genres -->
+       <div class="question-step active" data-step="1">
+        <div class="question-section"><label class="question-label"> <span class="question-number">1</span> ژانرهای مورد علاقه (می‌توانید چند مورد انتخاب کنید) </label>
+         <div class="checkbox-grid" id="genre-checkboxes"></div>
+        </div>
+        <div class="navigation-buttons"><button type="button" class="nav-button btn-next" id="next-1">بعدی</button>
+        </div>
+       </div><!-- Step 2: Length -->
+       <div class="question-step" data-step="2">
+        <div class="question-section"><label class="question-label"> <span class="question-number">2</span> طول ترجیحی انیمه </label>
+         <div class="radio-group" id="length-radios"></div>
+        </div>
+        <div class="navigation-buttons"><button type="button" class="nav-button btn-prev" id="prev-2">قبلی</button> <button type="button" class="nav-button btn-next" id="next-2">بعدی</button>
+        </div>
+       </div><!-- Step 3: Tone -->
+       <div class="question-step" data-step="3">
+        <div class="question-section"><label class="question-label"> <span class="question-number">3</span> لحن و حال و هوای مطلوب </label>
+         <div class="radio-group" id="tone-radios"></div>
+        </div>
+        <div class="navigation-buttons"><button type="button" class="nav-button btn-prev" id="prev-3">قبلی</button> <button type="button" class="nav-button btn-next" id="next-3">بعدی</button>
+        </div>
+       </div><!-- Step 4: Humor -->
+       <div class="question-step" data-step="4">
+        <div class="question-section"><label class="question-label"> <span class="question-number">4</span> ترجیح طنز </label>
+         <div class="radio-group" id="humor-radios"></div>
+        </div>
+        <div class="navigation-buttons"><button type="button" class="nav-button btn-prev" id="prev-4">قبلی</button> <button type="button" class="nav-button btn-next" id="next-4">بعدی</button>
+        </div>
+       </div><!-- Step 5: Watched anime -->
+       <div class="question-step" data-step="5">
+        <div class="question-section"><label class="question-label" for="watched-anime"> <span class="question-number">5</span> قبلا چه انیمه‌هایی دیدی؟ (اختیاری) </label>
+         <div class="text-input-wrapper"><textarea id="watched-anime" placeholder="مثلا: Naruto، One Piece، Attack on Titan..."></textarea>
+         </div>
+        </div>
+        <div class="navigation-buttons"><button type="button" class="nav-button btn-prev" id="prev-5">قبلی</button> <button type="submit" class="nav-button btn-submit" id="submit-button">پیدا کن!</button>
+        </div>
+       </div>
+      </form>
+     </main>
+     <main class="card hidden" id="result-card">
+      <div class="result-card">
+       <div class="result-title" id="result-title">
+        انیمه‌های پیشنهادی برای شما:
+       </div>
+       <div class="search-box"><input type="text" class="search-input" id="search-input" placeholder="جستجو بر اساس نام یا ژانر...">
+       </div>
+       <div class="anime-list" id="anime-list"></div>
+       <div class="no-results hidden" id="no-results">
+        نتیجه‌ای یافت نشد! 😕
+       </div><button class="retry-button" id="retry-button">دوباره امتحان کن</button>
+      </div>
+     </main>
+    </div>
+   </div>
+  </div>
+  <script>
+    // Anime Database with popularity scores
+    const animeDatabase = [
+      { name: "Attack on Titan", genres: ["اکشن", "معمایی", "ترسناک"], length: "متوسط", tone: "تاریک", humor: "جدی", popularity: 100 },
+      { name: "Death Note", genres: ["معمایی", "علمی-تخیلی"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 98 },
+      { name: "Fullmetal Alchemist: Brotherhood", genres: ["اکشن", "فانتزی"], length: "متوسط", tone: "تاریک", humor: "طنزدار", popularity: 99 },
+      { name: "Steins;Gate", genres: ["علمی-تخیلی", "معمایی"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 96 },
+      { name: "Hunter x Hunter", genres: ["اکشن", "فانتزی"], length: "طولانی", tone: "تاریک", humor: "طنزدار", popularity: 97 },
+      { name: "Code Geass", genres: ["اکشن", "علمی-تخیلی", "معمایی"], length: "متوسط", tone: "تاریک", humor: "جدی", popularity: 95 },
+      { name: "One Punch Man", genres: ["اکشن", "کمدی"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 94 },
+      { name: "Demon Slayer", genres: ["اکشن", "فانتزی"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 96 },
+      { name: "My Hero Academia", genres: ["اکشن", "کمدی", "مدرسه‌ای"], length: "طولانی", tone: "سبک/ملایم", humor: "طنزدار", popularity: 93 },
+      { name: "Cowboy Bebop", genres: ["اکشن", "علمی-تخیلی"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 95 },
+      { name: "Naruto", genres: ["اکشن", "فانتزی"], length: "طولانی", tone: "معمولی", humor: "طنزدار", popularity: 92 },
+      { name: "One Piece", genres: ["اکشن", "کمدی", "فانتزی"], length: "طولانی", tone: "سبک/ملایم", humor: "طنزدار", popularity: 93 },
+      { name: "Bleach", genres: ["اکشن", "فانتزی"], length: "طولانی", tone: "معمولی", humor: "طنزدار", popularity: 85 },
+      { name: "Neon Genesis Evangelion", genres: ["اکشن", "علمی-تخیلی", "معمایی"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 94 },
+      { name: "Dragon Ball Z", genres: ["اکشن", "کمدی"], length: "طولانی", tone: "سبک/ملایم", humor: "طنزدار", popularity: 90 },
+      { name: "Jujutsu Kaisen", genres: ["اکشن", "فانتزی", "ترسناک"], length: "کوتاه", tone: "تاریک", humor: "طنزدار", popularity: 93 },
+      { name: "Tokyo Ghoul", genres: ["اکشن", "ترسناک"], length: "متوسط", tone: "تاریک", humor: "جدی", popularity: 87 },
+      { name: "Fairy Tail", genres: ["اکشن", "کمدی", "فانتزی"], length: "طولانی", tone: "سبک/ملایم", humor: "طنزدار", popularity: 82 },
+      { name: "Black Clover", genres: ["اکشن", "کمدی", "فانتزی"], length: "طولانی", tone: "سبک/ملایم", humor: "طنزدار", popularity: 81 },
+      { name: "Kaguya-sama: Love is War", genres: ["عاشقانه", "کمدی", "مدرسه‌ای"], length: "متوسط", tone: "سبک/ملایم", humor: "طنزدار", popularity: 92 },
+      { name: "Clannad", genres: ["عاشقانه", "مدرسه‌ای"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 88 },
+      { name: "Toradora!", genres: ["عاشقانه", "کمدی", "مدرسه‌ای"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 90 },
+      { name: "Your Lie in April", genres: ["عاشقانه", "مدرسه‌ای"], length: "کوتاه", tone: "معمولی", humor: "جدی", popularity: 91 },
+      { name: "Fruits Basket", genres: ["عاشقانه", "فانتزی", "مدرسه‌ای"], length: "متوسط", tone: "معمولی", humor: "طنزدار", popularity: 89 },
+      { name: "Haikyuu!!", genres: ["اکشن", "کمدی", "مدرسه‌ای"], length: "متوسط", tone: "سبک/ملایم", humor: "طنزدار", popularity: 91 },
+      { name: "Mob Psycho 100", genres: ["اکشن", "کمدی"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 92 },
+      { name: "Sword Art Online", genres: ["اکشن", "عاشقانه", "علمی-تخیلی", "ایزکای"], length: "طولانی", tone: "معمولی", humor: "طنزدار", popularity: 85 },
+      { name: "Re:Zero", genres: ["اکشن", "فانتزی", "ایزکای", "ترسناک"], length: "متوسط", tone: "تاریک", humor: "طنزدار", popularity: 93 },
+      { name: "Konosuba", genres: ["کمدی", "فانتزی", "ایزکای"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 90 },
+      { name: "Gintama", genres: ["اکشن", "کمدی", "علمی-تخیلی"], length: "طولانی", tone: "سبک/ملایم", humor: "طنزدار", popularity: 93 },
+      { name: "Psycho-Pass", genres: ["اکشن", "علمی-تخیلی", "معمایی"], length: "متوسط", tone: "تاریک", humor: "جدی", popularity: 89 },
+      { name: "Made in Abyss", genres: ["فانتزی", "معمایی", "ترسناک"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 90 },
+      { name: "Vinland Saga", genres: ["اکشن"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 92 },
+      { name: "Berserk", genres: ["اکشن", "فانتزی", "ترسناک"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 91 },
+      { name: "Spirited Away", genres: ["فانتزی"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 96 },
+      { name: "Princess Mononoke", genres: ["اکشن", "فانتزی"], length: "کوتاه", tone: "معمولی", humor: "جدی", popularity: 94 },
+      { name: "Parasyte", genres: ["اکشن", "علمی-تخیلی", "ترسناک"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 90 },
+      { name: "The Promised Neverland", genres: ["معمایی", "ترسناک"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 89 },
+      { name: "Erased", genres: ["معمایی", "علمی-تخیلی"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 91 },
+      { name: "A Silent Voice", genres: ["عاشقانه", "مدرسه‌ای"], length: "کوتاه", tone: "معمولی", humor: "جدی", popularity: 93 },
+      { name: "Monster", genres: ["معمایی", "ترسناک"], length: "متوسط", tone: "تاریک", humor: "جدی", popularity: 92 },
+      { name: "Akira", genres: ["اکشن", "علمی-تخیلی"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 92 },
+      { name: "Puella Magi Madoka Magica", genres: ["فانتزی", "معمایی", "ترسناک"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 91 },
+      { name: "Angel Beats!", genres: ["کمدی", "فانتزی"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 87 },
+      { name: "Yu Yu Hakusho", genres: ["اکشن", "فانتزی"], length: "طولانی", tone: "معمولی", humor: "طنزدار", popularity: 88 },
+      { name: "Slam Dunk", genres: ["اکشن", "کمدی", "مدرسه‌ای"], length: "طولانی", tone: "سبک/ملایم", humor: "طنزدار", popularity: 89 },
+      { name: "No Game No Life", genres: ["کمدی", "فانتزی", "ایزکای"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 88 },
+      { name: "Overlord", genres: ["اکشن", "فانتزی", "ایزکای"], length: "متوسط", tone: "تاریک", humor: "طنزدار", popularity: 87 },
+      { name: "Dr. Stone", genres: ["اکشن", "کمدی", "علمی-تخیلی"], length: "متوسط", tone: "سبک/ملایم", humor: "طنزدار", popularity: 87 },
+      { name: "Violet Evergarden", genres: ["عاشقانه"], length: "کوتاه", tone: "معمولی", humor: "جدی", popularity: 90 },
+      { name: "Nichijou", genres: ["کمدی", "مدرسه‌ای"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 88 },
+      { name: "Black Lagoon", genres: ["اکشن"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 87 },
+      { name: "Fire Force", genres: ["اکشن", "فانتزی"], length: "متوسط", tone: "معمولی", humor: "طنزدار", popularity: 84 },
+      { name: "The Seven Deadly Sins", genres: ["اکشن", "فانتزی", "کمدی"], length: "متوسط", tone: "سبک/ملایم", humor: "طنزدار", popularity: 85 },
+      { name: "Katanagatari", genres: ["اکشن", "فانتزی"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 86 },
+      { name: "Fate/stay night", genres: ["اکشن", "فانتزی"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 84 },
+      { name: "Yuri!!! on ICE", genres: ["عاشقانه"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 88 },
+      { name: "K-On!", genres: ["کمدی", "مدرسه‌ای"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 89 },
+      { name: "Bungou Stray Dogs", genres: ["اکشن", "معمایی"], length: "متوسط", tone: "معمولی", humor: "طنزدار", popularity: 86 },
+      { name: "Samurai Champloo", genres: ["اکشن"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 89 },
+      { name: "Eden of the East", genres: ["معمایی", "علمی-تخیلی"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 85 },
+      { name: "The Tatami Galaxy", genres: ["کمدی"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 87 },
+      { name: "Hinamatsuri", genres: ["کمدی", "علمی-تخیلی"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 87 },
+      { name: "A Place Further than the Universe", genres: ["کمدی"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 89 },
+      { name: "Bakemonogatari", genres: ["معمایی", "فانتزی", "عاشقانه"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 90 },
+      { name: "FLCL (Fooly Cooly)", genres: ["اکشن", "کمدی", "علمی-تخیلی"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 85 },
+      { name: "Oshi no Ko", genres: ["معمایی", "عاشقانه"], length: "کوتاه", tone: "تاریک", humor: "طنزدار", popularity: 91 },
+      { name: "Blue Exorcist", genres: ["اکشن", "فانتزی"], length: "متوسط", tone: "معمولی", humor: "طنزدار", popularity: 84 },
+      { name: "Great Pretender", genres: ["اکشن", "کمدی"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 87 },
+      { name: "Golden Time", genres: ["عاشقانه", "کمدی", "مدرسه‌ای"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 84 },
+      { name: "Honey and Clover", genres: ["عاشقانه", "کمدی", "مدرسه‌ای"], length: "متوسط", tone: "معمولی", humor: "طنزدار", popularity: 85 },
+      { name: "Kakegurui", genres: ["معمایی", "مدرسه‌ای"], length: "کوتاه", tone: "تاریک", humor: "طنزدار", popularity: 83 },
+      { name: "Black Butler", genres: ["اکشن", "فانتزی", "معمایی"], length: "متوسط", tone: "تاریک", humor: "طنزدار", popularity: 85 },
+      { name: "Chihayafuru", genres: ["عاشقانه", "مدرسه‌ای"], length: "متوسط", tone: "معمولی", humor: "طنزدار", popularity: 88 },
+      { name: "Sound! Euphonium", genres: ["مدرسه‌ای"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 86 },
+      { name: "The Irregular at Magic High School", genres: ["اکشن", "علمی-تخیلی", "مدرسه‌ای"], length: "متوسط", tone: "معمولی", humor: "جدی", popularity: 81 },
+      { name: "School Rumble", genres: ["عاشقانه", "کمدی", "مدرسه‌ای"], length: "متوسط", tone: "سبک/ملایم", humor: "طنزدار", popularity: 83 },
+      { name: "Bakuman.", genres: ["کمدی", "عاشقانه", "مدرسه‌ای"], length: "متوسط", tone: "سبک/ملایم", humor: "طنزدار", popularity: 87 },
+      { name: "Ghost in the Shell (Movie)", genres: ["اکشن", "علمی-تخیلی", "معمایی"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 93 },
+      { name: "Space Dandy", genres: ["اکشن", "کمدی", "علمی-تخیلی"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 84 },
+      { name: "To Your Eternity", genres: ["فانتزی"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 87 },
+      { name: "The Devil Is a Part-Timer!", genres: ["کمدی", "فانتزی"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 86 },
+      { name: "Great Teacher Onizuka", genres: ["کمدی", "مدرسه‌ای"], length: "متوسط", tone: "سبک/ملایم", humor: "طنزدار", popularity: 89 },
+      { name: "Wolf Children", genres: ["فانتزی"], length: "کوتاه", tone: "معمولی", humor: "جدی", popularity: 91 },
+      { name: "Tokyo Revengers", genres: ["اکشن", "معمایی", "علمی-تخیلی"], length: "متوسط", tone: "تاریک", humor: "طنزدار", popularity: 88 },
+      { name: "Demon Slayer: Mugen Train", genres: ["اکشن", "فانتزی"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 95 },
+      { name: "Chainsaw Man", genres: ["اکشن", "فانتزی", "ترسناک"], length: "کوتاه", tone: "تاریک", humor: "طنزدار", popularity: 92 },
+      { name: "Kuroko's Basketball", genres: ["اکشن", "کمدی", "مدرسه‌ای"], length: "متوسط", tone: "سبک/ملایم", humor: "طنزدار", popularity: 86 },
+      { name: "Ping Pong the Animation", genres: ["مدرسه‌ای"], length: "کوتاه", tone: "معمولی", humor: "جدی", popularity: 88 },
+      { name: "Saga of Tanya the Evil", genres: ["اکشن", "علمی-تخیلی", "ایزکای"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 85 },
+      { name: "Clannad: After Story", genres: ["عاشقانه", "مدرسه‌ای"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 92 },
+      { name: "Ao Haru Ride", genres: ["عاشقانه", "مدرسه‌ای"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 84 },
+      { name: "My Teen Romantic Comedy SNAFU", genres: ["عاشقانه", "کمدی", "مدرسه‌ای"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 87 },
+      { name: "Say I Love You", genres: ["عاشقانه", "مدرسه‌ای"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 82 },
+      { name: "Kaichou wa Maid-sama!", genres: ["عاشقانه", "کمدی", "مدرسه‌ای"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 85 },
+      { name: "Nisekoi", genres: ["عاشقانه", "کمدی", "مدرسه‌ای"], length: "متوسط", tone: "سبک/ملایم", humor: "طنزدار", popularity: 82 },
+      { name: "The Pet Girl of Sakurasou", genres: ["عاشقانه", "کمدی", "مدرسه‌ای"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 84 },
+      { name: "My Little Monster", genres: ["عاشقانه", "کمدی", "مدرسه‌ای"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 83 },
+      { name: "Kimi ni Todoke", genres: ["عاشقانه", "مدرسه‌ای"], length: "متوسط", tone: "سبک/ملایم", humor: "طنزدار", popularity: 86 },
+      { name: "ReLIFE", genres: ["عاشقانه", "کمدی", "مدرسه‌ای"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 85 },
+      { name: "Horimiya", genres: ["عاشقانه", "کمدی", "مدرسه‌ای"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 88 },
+      { name: "Monthly Girls' Nozaki-kun", genres: ["عاشقانه", "کمدی", "مدرسه‌ای"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 85 },
+      { name: "Orange", genres: ["عاشقانه", "علمی-تخیلی", "مدرسه‌ای"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 83 },
+      { name: "Anohana: The Flower We Saw That Day", genres: ["عاشقانه"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 89 },
+      { name: "White Album 2", genres: ["عاشقانه", "مدرسه‌ای"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 85 },
+      { name: "Plastic Memories", genres: ["عاشقانه", "علمی-تخیلی"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 83 },
+      { name: "Wotakoi: Love is Hard for Otaku", genres: ["عاشقانه", "کمدی"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 85 },
+      { name: "Tsuki ga Kirei", genres: ["عاشقانه", "مدرسه‌ای"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 86 },
+      { name: "Spy x Family", genres: ["اکشن", "کمدی"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 94 },
+      { name: "Blue Lock", genres: ["اکشن", "مدرسه‌ای"], length: "کوتاه", tone: "معمولی", humor: "جدی", popularity: 89 },
+      { name: "Ranking of Kings", genres: ["فانتزی"], length: "کوتاه", tone: "معمولی", humor: "طنزدار", popularity: 90 },
+      { name: "Hell's Paradise: Jigokuraku", genres: ["اکشن", "فانتزی", "ترسناک"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 87 },
+      { name: "Mashle: Magic and Muscles", genres: ["اکشن", "کمدی", "فانتزی"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 86 },
+      { name: "Lycoris Recoil", genres: ["اکشن"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 88 },
+      { name: "Solo Leveling", genres: ["اکشن", "فانتزی"], length: "کوتاه", tone: "تاریک", humor: "جدی", popularity: 92 },
+      { name: "The Eminence in Shadow", genres: ["اکشن", "کمدی", "فانتزی", "ایزکای"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 87 },
+      { name: "Mushoku Tensei", genres: ["اکشن", "فانتزی", "ایزکای"], length: "متوسط", tone: "معمولی", humor: "طنزدار", popularity: 91 },
+      { name: "Bocchi the Rock!", genres: ["کمدی", "مدرسه‌ای"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 89 },
+      { name: "Delicious in Dungeon", genres: ["اکشن", "کمدی", "فانتزی"], length: "کوتاه", tone: "سبک/ملایم", humor: "طنزدار", popularity: 88 }
+    ];
+
+    // Form data
+    const genres = ["اکشن", "عاشقانه", "کمدی", "فانتزی", "ایزکای", "علمی-تخیلی", "معمایی", "ترسناک", "مدرسه‌ای"];
+    const lengths = [
+      { value: "کوتاه", label: "کوتاه (تا 13 قسمت)" },
+      { value: "متوسط", label: "متوسط (13 تا 50 قسمت)" },
+      { value: "طولانی", label: "طولانی (بیش از 50 قسمت)" },
+      { value: "فرقی نمی‌کند", label: "فرقی نمی‌کند" }
+    ];
+    const tones = [
+      { value: "سبک/ملایم", label: "سبک/ملایم" },
+      { value: "معمولی", label: "معمولی" },
+      { value: "تاریک", label: "تاریک" },
+      { value: "فرقی نمی‌کند", label: "فرقی نمی‌کند" }
+    ];
+    const humors = [
+      { value: "طنزدار", label: "طنزدار" },
+      { value: "جدی", label: "جدی" },
+      { value: "فرقی نمی‌کند", label: "فرقی نمی‌کند" }
+    ];
+
+    // State
+    let currentStep = 1;
+    let allFilteredAnime = [];
+
+    // Persian number conversion
+    const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    function toPersianNumber(num) {
+      return num.toString().split('').map(d => persianNumbers[parseInt(d)] || d).join('');
+    }
+
+    // Check if user has seen welcome screens before
+    function checkFirstVisit() {
+      const hasVisited = localStorage.getItem('anime_app_visited');
+      if (hasVisited) {
+        document.getElementById('welcome-screen').classList.remove('active');
+        document.getElementById('main-screen').classList.add('active');
+      }
+    }
+
+    // Copy anime name to clipboard
+    function copyAnimeNameToClipboard(animeName, button) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(animeName).then(() => {
+          button.textContent = '✓';
+          button.classList.add('copied');
+          
+          setTimeout(() => {
+            button.textContent = '📋';
+            button.classList.remove('copied');
+          }, 2000);
+        }).catch(() => {
+          fallbackCopy(animeName, button);
+        });
+      } else {
+        fallbackCopy(animeName, button);
+      }
+    }
+
+    function fallbackCopy(animeName, button) {
+      const textArea = document.createElement('textarea');
+      textArea.value = animeName;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        button.textContent = '✓';
+        button.classList.add('copied');
+        setTimeout(() => {
+          button.textContent = '📋';
+          button.classList.remove('copied');
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy');
+      }
+      document.body.removeChild(textArea);
+    }
+
+    // Initialize form
+    function initializeForm() {
+      const genreContainer = document.getElementById('genre-checkboxes');
+      genres.forEach(genre => {
+        const div = document.createElement('div');
+        div.className = 'checkbox-item';
+        div.innerHTML = `
+          <input type="checkbox" id="genre-${genre}" name="genres" value="${genre}">
+          <label for="genre-${genre}">${genre}</label>
+        `;
+        div.addEventListener('click', function(e) {
+          if (e.target.tagName !== 'INPUT') {
+            const checkbox = this.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+          }
+          this.classList.toggle('selected', this.querySelector('input').checked);
+        });
+        genreContainer.appendChild(div);
+      });
+
+      const lengthContainer = document.getElementById('length-radios');
+      lengths.forEach(length => {
+        const div = document.createElement('div');
+        div.className = 'radio-item';
+        div.innerHTML = `
+          <input type="radio" id="length-${length.value}" name="length" value="${length.value}">
+          <label for="length-${length.value}">${length.label}</label>
+        `;
+        div.addEventListener('click', function() {
+          document.querySelectorAll('.radio-item').forEach(item => {
+            if (item.querySelector('input[name="length"]')) {
+              item.classList.remove('selected');
+            }
+          });
+          this.classList.add('selected');
+          this.querySelector('input').checked = true;
+        });
+        lengthContainer.appendChild(div);
+      });
+
+      const toneContainer = document.getElementById('tone-radios');
+      tones.forEach(tone => {
+        const div = document.createElement('div');
+        div.className = 'radio-item';
+        div.innerHTML = `
+          <input type="radio" id="tone-${tone.value}" name="tone" value="${tone.value}">
+          <label for="tone-${tone.value}">${tone.label}</label>
+        `;
+        div.addEventListener('click', function() {
+          document.querySelectorAll('.radio-item').forEach(item => {
+            if (item.querySelector('input[name="tone"]')) {
+              item.classList.remove('selected');
+            }
+          });
+          this.classList.add('selected');
+          this.querySelector('input').checked = true;
+        });
+        toneContainer.appendChild(div);
+      });
+
+      const humorContainer = document.getElementById('humor-radios');
+      humors.forEach(humor => {
+        const div = document.createElement('div');
+        div.className = 'radio-item';
+        div.innerHTML = `
+          <input type="radio" id="humor-${humor.value}" name="humor" value="${humor.value}">
+          <label for="humor-${humor.value}">${humor.label}</label>
+        `;
+        div.addEventListener('click', function() {
+          document.querySelectorAll('.radio-item').forEach(item => {
+            if (item.querySelector('input[name="humor"]')) {
+              item.classList.remove('selected');
+            }
+          });
+          this.classList.add('selected');
+          this.querySelector('input').checked = true;
+        });
+        humorContainer.appendChild(div);
+      });
+
+      // Navigation buttons
+      for (let i = 1; i <= 5; i++) {
+        const nextBtn = document.getElementById(`next-${i}`);
+        const prevBtn = document.getElementById(`prev-${i}`);
+        
+        if (nextBtn) {
+          nextBtn.addEventListener('click', () => goToStep(i + 1));
+        }
+        if (prevBtn) {
+          prevBtn.addEventListener('click', () => goToStep(i - 1));
+        }
+      }
+
+      // Search input
+      const searchInput = document.getElementById('search-input');
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.trim().toLowerCase();
+        filterDisplayedAnime(searchTerm);
+      });
+    }
+
+    // Navigate between steps
+    function goToStep(step) {
+      if (step < 1 || step > 5) return;
+      
+      document.querySelectorAll('.question-step').forEach(s => s.classList.remove('active'));
+      document.querySelector(`[data-step="${step}"]`).classList.add('active');
+      
+      currentStep = step;
+      updateProgress();
+    }
+
+    // Update progress bar
+    function updateProgress() {
+      const progress = (currentStep / 5) * 100;
+      document.getElementById('progress-fill').style.width = `${progress}%`;
+      document.getElementById('step-indicator').textContent = `سوال ${toPersianNumber(currentStep)} از ${toPersianNumber(5)}`;
+    }
+
+    // Calculate match score for an anime
+    function calculateScore(anime, selectedGenres, length, tone, humor) {
+      let score = 0;
+
+      // Genre matching (most important - up to 50 points)
+      if (selectedGenres.length > 0) {
+        const matchingGenres = anime.genres.filter(g => selectedGenres.includes(g)).length;
+        const genreScore = (matchingGenres / selectedGenres.length) * 30;
+        score += genreScore;
+        
+        // Bonus for multiple genre matches
+        if (matchingGenres >= 2) {
+          score += 10;
+        }
+        if (matchingGenres >= 3) {
+          score += 10;
+        }
+      }
+
+      // Length matching (15 points)
+      if (length && length !== "فرقی نمی‌کند") {
+        if (anime.length === length) {
+          score += 15;
+        }
+      }
+
+      // Tone matching (15 points)
+      if (tone && tone !== "فرقی نمی‌کند") {
+        if (anime.tone === tone) {
+          score += 15;
+        } else {
+          // Partial credit for similar tones
+          const toneMap = {
+            "سبک/ملایم": ["معمولی"],
+            "معمولی": ["سبک/ملایم", "تاریک"],
+            "تاریک": ["معمولی"]
+          };
+          if (toneMap[tone] && toneMap[tone].includes(anime.tone)) {
+            score += 7;
+          }
+        }
+      }
+
+      // Humor matching (10 points)
+      if (humor && humor !== "فرقی نمی‌کند") {
+        if (anime.humor === humor) {
+          score += 10;
+        }
+      }
+
+      // Popularity bonus (up to 20 points)
+      score += (anime.popularity / 100) * 20;
+
+      return score;
+    }
+
+    // Filter anime with improved algorithm
+    function filterAnime(selectedGenres, length, tone, humor, watchedAnime) {
+      let filtered = [...animeDatabase];
+
+      // Remove watched anime
+      if (watchedAnime) {
+        const watchedList = watchedAnime.toLowerCase().split(/[،,\n]+/).map(s => s.trim());
+        filtered = filtered.filter(anime => 
+          !watchedList.some(watched => anime.name.toLowerCase().includes(watched) || watched.includes(anime.name.toLowerCase()))
+        );
+      }
+
+      // Calculate scores for all anime
+      const scoredAnime = filtered.map(anime => ({
+        ...anime,
+        score: calculateScore(anime, selectedGenres, length, tone, humor)
+      }));
+
+      // Sort by score
+      scoredAnime.sort((a, b) => b.score - a.score);
+
+      // If no good matches found (low scores), include more popular anime
+      if (scoredAnime.length > 0 && scoredAnime[0].score < 20 && selectedGenres.length > 0) {
+        const genreFiltered = animeDatabase.filter(anime => 
+          anime.genres.some(g => selectedGenres.includes(g))
+        );
+        
+        if (genreFiltered.length > 0) {
+          const reScored = genreFiltered.map(anime => ({
+            ...anime,
+            score: calculateScore(anime, selectedGenres, length, tone, humor)
+          }));
+          reScored.sort((a, b) => b.score - a.score);
+          return reScored;
+        }
+      }
+
+      return scoredAnime;
+    }
+
+    // Filter displayed anime based on search
+    function filterDisplayedAnime(searchTerm) {
+      const animeListContainer = document.getElementById('anime-list');
+      const noResults = document.getElementById('no-results');
+      
+      if (!searchTerm) {
+        displayAnimeList(allFilteredAnime);
+        return;
+      }
+
+      const filtered = allFilteredAnime.filter(anime => 
+        anime.name.toLowerCase().includes(searchTerm) ||
+        anime.genres.some(g => g.includes(searchTerm))
+      );
+
+      if (filtered.length === 0) {
+        animeListContainer.classList.add('hidden');
+        noResults.classList.remove('hidden');
+      } else {
+        animeListContainer.classList.remove('hidden');
+        noResults.classList.add('hidden');
+        displayAnimeList(filtered);
+      }
+    }
+
+    // Display anime list
+    function displayAnimeList(animeList) {
+      const animeListContainer = document.getElementById('anime-list');
+      const noResults = document.getElementById('no-results');
+      
+      animeListContainer.innerHTML = '';
+      
+      if (animeList.length === 0) {
+        animeListContainer.classList.add('hidden');
+        noResults.classList.remove('hidden');
+        return;
+      }
+
+      animeListContainer.classList.remove('hidden');
+      noResults.classList.add('hidden');
+      
+      const topAnime = animeList.slice(0, 15);
+      
+      topAnime.forEach((anime, index) => {
+        const isTopPick = index === 0;
+        const div = document.createElement('div');
+        div.className = `anime-item ${isTopPick ? 'top-pick' : ''}`;
+        
+        const rankEmoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : toPersianNumber(index + 1);
+        
+        const matchScore = anime.score ? Math.round(anime.score) : anime.popularity;
+        
+        div.innerHTML = `
+          <div class="anime-rank">${rankEmoji}</div>
+          <div class="anime-details">
+            <div class="anime-name">${anime.name}</div>
+            <div class="anime-meta">
+              <span class="anime-badge">امتیاز ${toPersianNumber(matchScore)}</span>
+              <span>${anime.genres.slice(0, 3).join('، ')}</span>
+              <span>${anime.length}</span>
+            </div>
+          </div>
+          <button class="copy-button" data-anime-name="${anime.name}" aria-label="کپی نام انیمه">📋</button>
+        `;
+        
+        const copyButton = div.querySelector('.copy-button');
+        copyButton.addEventListener('click', function(e) {
+          e.stopPropagation();
+          copyAnimeNameToClipboard(anime.name, this);
+        });
+        
+        animeListContainer.appendChild(div);
+      });
+    }
+
+    // Handle form submission
+    document.getElementById('anime-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const selectedGenres = Array.from(document.querySelectorAll('input[name="genres"]:checked'))
+        .map(cb => cb.value);
+      const length = document.querySelector('input[name="length"]:checked')?.value || null;
+      const tone = document.querySelector('input[name="tone"]:checked')?.value || null;
+      const humor = document.querySelector('input[name="humor"]:checked')?.value || null;
+      const watchedAnime = document.getElementById('watched-anime').value.trim();
+
+      allFilteredAnime = filterAnime(selectedGenres, length, tone, humor, watchedAnime);
+      
+      displayAnimeList(allFilteredAnime);
+      document.getElementById('search-input').value = '';
+      document.getElementById('question-form').classList.add('hidden');
+      document.getElementById('result-card').classList.remove('hidden');
+    });
+
+    // Retry button
+    document.getElementById('retry-button').addEventListener('click', function() {
+      document.getElementById('result-card').classList.add('hidden');
+      document.getElementById('question-form').classList.remove('hidden');
+      goToStep(1);
+      
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.checked = false;
+        cb.closest('.checkbox-item').classList.remove('selected');
+      });
+      document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.checked = false;
+        radio.closest('.radio-item').classList.remove('selected');
+      });
+      document.getElementById('watched-anime').value = '';
+      document.getElementById('search-input').value = '';
+      allFilteredAnime = [];
+    });
+
+    // Welcome screen button
+    document.getElementById('welcome-button').addEventListener('click', function() {
+      document.getElementById('welcome-screen').classList.remove('active');
+      document.getElementById('membership-screen').classList.add('active');
+    });
+
+    // Join button
+    document.getElementById('join-button').addEventListener('click', function() {
+      window.open('https://rubika.ir/joinc/ECCAJGEC0MDLXLNHPWYNEIPVNJSRNCER', '_blank', 'noopener,noreferrer');
+      const continueBtn = document.getElementById('continue-button');
+      continueBtn.classList.remove('disabled');
+      continueBtn.disabled = false;
+    });
+
+    // Continue button
+    document.getElementById('continue-button').addEventListener('click', function() {
+      if (!this.disabled) {
+        document.getElementById('membership-screen').classList.remove('active');
+        document.getElementById('main-screen').classList.add('active');
+        localStorage.setItem('anime_app_visited', 'true');
+      }
+    });
+
+    // Element SDK Configuration
+    const defaultConfig = {
+      main_title: "انیمه مورد علاقه‌ات را پیدا کن",
+      subtitle: "با پاسخ دادن به چند سوال ساده",
+      welcome_title: "به پیشنهاد‌دهنده انیمه خوش آمدید!",
+      welcome_message: "تیم منتورو",
+      welcome_button: "بزن بریم",
+      membership_title: "یک قدم مانده!",
+      membership_message: "لطفا در کانال روبیکا ما عضو شوید تا بتوانید از پیشنهادات انیمه استفاده کنید",
+      join_button: "عضویت در کانال",
+      continue_button: "ادامه",
+      next_button: "بعدی",
+      prev_button: "قبلی",
+      submit_button: "پیدا کن!",
+      result_title: "انیمه‌های پیشنهادی برای شما:",
+      search_placeholder: "جستجو بر اساس نام یا ژانر...",
+      no_results: "نتیجه‌ای یافت نشد! 😕",
+      retry_button: "دوباره امتحان کن",
+      background_color: "#667eea",
+      surface_color: "#ffffff",
+      text_color: "#2d3748",
+      primary_action_color: "#667eea",
+      secondary_action_color: "#764ba2",
+      font_family: "Vazirmatn",
+      font_size: 16
+    };
+
+    async function onConfigChange(config) {
+      const mainTitle = document.getElementById('main-title');
+      const subtitle = document.getElementById('subtitle');
+      const welcomeTitle = document.getElementById('welcome-title');
+      const welcomeMessage = document.getElementById('welcome-message');
+      const welcomeButton = document.getElementById('welcome-button');
+      const membershipTitle = document.getElementById('membership-title');
+      const membershipMessage = document.getElementById('membership-message');
+      const joinButton = document.getElementById('join-button');
+      const continueButton = document.getElementById('continue-button');
+      const submitButton = document.getElementById('submit-button');
+      const retryButton = document.getElementById('retry-button');
+      const resultTitle = document.getElementById('result-title');
+      const searchInput = document.getElementById('search-input');
+      const noResults = document.getElementById('no-results');
+
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryActionColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryActionColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      const fontSize = config.font_size || defaultConfig.font_size;
+
+      mainTitle.textContent = config.main_title || defaultConfig.main_title;
+      subtitle.textContent = config.subtitle || defaultConfig.subtitle;
+      welcomeTitle.textContent = config.welcome_title || defaultConfig.welcome_title;
+      welcomeMessage.textContent = config.welcome_message || defaultConfig.welcome_message;
+      welcomeButton.textContent = config.welcome_button || defaultConfig.welcome_button;
+      membershipTitle.textContent = config.membership_title || defaultConfig.membership_title;
+      membershipMessage.textContent = config.membership_message || defaultConfig.membership_message;
+      joinButton.textContent = config.join_button || defaultConfig.join_button;
+      continueButton.textContent = config.continue_button || defaultConfig.continue_button;
+      submitButton.textContent = config.submit_button || defaultConfig.submit_button;
+      retryButton.textContent = config.retry_button || defaultConfig.retry_button;
+      resultTitle.textContent = config.result_title || defaultConfig.result_title;
+      searchInput.placeholder = config.search_placeholder || defaultConfig.search_placeholder;
+      noResults.textContent = config.no_results || defaultConfig.no_results;
+
+      document.querySelectorAll('.btn-next').forEach(btn => {
+        if (btn.id !== 'submit-button') {
+          btn.textContent = config.next_button || defaultConfig.next_button;
+        }
+      });
+      document.querySelectorAll('.btn-prev').forEach(btn => {
+        btn.textContent = config.prev_button || defaultConfig.prev_button;
+      });
+
+      document.body.style.background = `linear-gradient(135deg, ${backgroundColor} 0%, ${secondaryActionColor} 100%)`;
+      
+      const cards = document.querySelectorAll('.card, .welcome-container, .membership-container');
+      cards.forEach(card => {
+        card.style.backgroundColor = surfaceColor;
+        card.style.color = textColor;
+      });
+
+      const questionLabels = document.querySelectorAll('.question-label');
+      questionLabels.forEach(label => {
+        label.style.color = primaryActionColor;
+      });
+
+      const actionButtons = document.querySelectorAll('.btn-next, .btn-submit, .welcome-button, .membership-button, .retry-button');
+      actionButtons.forEach(btn => {
+        if (!btn.classList.contains('disabled')) {
+          btn.style.background = `linear-gradient(135deg, ${primaryActionColor} 0%, ${secondaryActionColor} 100%)`;
+        }
+      });
+
+      welcomeTitle.style.color = primaryActionColor;
+      membershipTitle.style.color = primaryActionColor;
+      resultTitle.style.color = primaryActionColor;
+
+      const fontStack = `${fontFamily}, 'Vazirmatn', Tahoma, Arial, sans-serif`;
+      document.body.style.fontFamily = fontStack;
+      
+      mainTitle.style.fontSize = `${fontSize * 2.5}px`;
+      subtitle.style.fontSize = `${fontSize * 1.1}px`;
+      welcomeTitle.style.fontSize = `${fontSize * 2}px`;
+      membershipTitle.style.fontSize = `${fontSize * 2}px`;
+      resultTitle.style.fontSize = `${fontSize * 1.5}px`;
+      searchInput.style.fontSize = `${fontSize}px`;
+      noResults.style.fontSize = `${fontSize * 1.1}px`;
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig: defaultConfig,
+        onConfigChange: onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => {
+                config.surface_color = value;
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => {
+                config.primary_action_color = value;
+                window.elementSdk.setConfig({ primary_action_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => {
+                config.secondary_action_color = value;
+                window.elementSdk.setConfig({ secondary_action_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["main_title", config.main_title || defaultConfig.main_title],
+          ["subtitle", config.subtitle || defaultConfig.subtitle],
+          ["welcome_title", config.welcome_title || defaultConfig.welcome_title],
+          ["welcome_message", config.welcome_message || defaultConfig.welcome_message],
+          ["welcome_button", config.welcome_button || defaultConfig.welcome_button],
+          ["membership_title", config.membership_title || defaultConfig.membership_title],
+          ["membership_message", config.membership_message || defaultConfig.membership_message],
+          ["join_button", config.join_button || defaultConfig.join_button],
+          ["continue_button", config.continue_button || defaultConfig.continue_button],
+          ["next_button", config.next_button || defaultConfig.next_button],
+          ["prev_button", config.prev_button || defaultConfig.prev_button],
+          ["submit_button", config.submit_button || defaultConfig.submit_button],
+          ["result_title", config.result_title || defaultConfig.result_title],
+          ["search_placeholder", config.search_placeholder || defaultConfig.search_placeholder],
+          ["no_results", config.no_results || defaultConfig.no_results],
+          ["retry_button", config.retry_button || defaultConfig.retry_button]
+        ])
+      });
+    }
+
+    checkFirstVisit();
+    initializeForm();
+    updateProgress();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ac75f3f243d1717',t:'MTc2NTQ4MTE3MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
